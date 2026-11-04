@@ -1,0 +1,6 @@
+{
+  "name": "GeneLab AI",
+  "description": "AI-powered interactive genetics learning laboratory with Mendelian inheritance, DNA explorer, mutation simulation, and bilingual assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
