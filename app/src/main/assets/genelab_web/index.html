@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeneLab AI — مختبر علم الوراثة والأحياء الجزيئية</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#070b19">
+</head>
+<body class="dark-theme">
+    <!-- Main App Container -->
+    <div class="app-layout">
+        <!-- Desktop Sidebar (Responsive) -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo-box">
+                    <span class="dna-icon">🧬</span>
+                </div>
+                <div class="brand-text">
+                    <h1 class="brand-title">GeneLab AI</h1>
+                    <span class="brand-sub" data-i18n="lab_subtitle">مختبر الوراثة الذكي</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label" data-i18n="nav_dashboard">الرئيسية</span>
+                </button>
+                <button class="nav-item" data-tab="punnett">
+                    <span class="nav-icon">⊞</span>
+                    <span class="nav-label" data-i18n="nav_punnett">مربع بانيت</span>
+                </button>
+                <button class="nav-item" data-tab="solver">
+                    <span class="nav-icon">🧮</span>
+                    <span class="nav-label" data-i18n="nav_solver">محلل الوراثة</span>
+                </button>
+                <button class="nav-item" data-tab="dna">
+                    <span class="nav-icon">🧬</span>
+                    <span class="nav-label" data-i18n="nav_dna">مستكشف الـ DNA</span>
+                </button>
+                <button class="nav-item" data-tab="breeding">
+                    <span class="nav-icon">🧪</span>
+                    <span class="nav-label" data-i18n="nav_breeding">محاكي التزاوج</span>
+                </button>
+                <button class="nav-item" data-tab="mutations">
+                    <span class="nav-icon">⚡</span>
+                    <span class="nav-label" data-i18n="nav_mutations">مستكشف الطفرات</span>
+                </button>
+                <button class="nav-item" data-tab="lessons">
+                    <span class="nav-icon">📖</span>
+                    <span class="nav-label" data-i18n="nav_lessons">مركز الدروس</span>
+                </button>
+                <button class="nav-item" data-tab="quiz">
+                    <span class="nav-icon">🏆</span>
+                    <span class="nav-label" data-i18n="nav_quiz">الاختبارات الذكية</span>
+                </button>
+                <button class="nav-item" data-tab="assistant">
+                    <span class="nav-icon">🤖</span>
+                    <span class="nav-label" data-i18n="nav_assistant">المساعد الذكي</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="ctrl-btn lang-btn" id="langToggle">
+                    <span class="flag-icon" id="langFlag">🇸🇦</span>
+                    <span id="langText">English</span>
+                </button>
+                <button class="ctrl-btn theme-btn" id="themeToggle" title="تبديل السمة">
+                    <span id="themeIcon">☀️</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Mobile Header -->
+            <header class="mobile-header">
+                <div class="brand-mini">
+                    <span class="dna-icon">🧬</span>
+                    <span class="brand-title">GeneLab AI</span>
+                </div>
+                <div class="header-actions">
+                    <button class="mini-btn" id="mobileLangToggle">EN</button>
+                    <button class="mini-btn" id="mobileThemeToggle">☀️</button>
+                </div>
+            </header>
+
+            <!-- Notification Toast -->
+            <div id="toast" class="toast hidden"></div>
+
+            <!-- TAB 1: DASHBOARD -->
+            <section id="tab-dashboard" class="tab-pane active">
+                <div class="hero-banner glass-card">
+                    <div class="hero-text">
+                        <span class="badge cyan-badge" data-i18n="hero_badge">مختبر الأحياء الجزيئية والوراثة</span>
+                        <h2 data-i18n="hero_title">استكشف أسرار الـ DNA والوراثة المندلية</h2>
+                        <p data-i18n="hero_desc">منصة تعليمية متطورة توفر محاكاة تفاعلية لمربعات بانيت، الطفرات الجينية، وترجمة الأحماض الأمينية مع مساعد ذكاء اصطناعي متخصص.</p>
+                        <div class="hero-actions">
+                            <button class="btn btn-primary" onclick="switchTab('punnett')">
+                                <span>⊞</span> <span data-i18n="hero_start_btn">بدء تجربة التزاوج</span>
+                            </button>
+                            <button class="btn btn-secondary" onclick="switchTab('dna')">
+                                <span>🧬</span> <span data-i18n="hero_dna_btn">مستكشف الـ DNA</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hero-canvas-box">
+                        <canvas id="heroDnaCanvas" width="160" height="220"></canvas>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-row">
+                    <div class="stat-card glass-card">
+                        <span class="stat-icon cyan">📖</span>
+                        <div class="stat-num" id="statLessons">9</div>
+                        <div class="stat-label" data-i18n="stat_lessons">دروس شاملة</div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <span class="stat-icon purple">🧪</span>
+                        <div class="stat-num" id="statExperiments">5</div>
+                        <div class="stat-label" data-i18n="stat_tools">أدوات مختبرية</div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <span class="stat-icon green">🏆</span>
+                        <div class="stat-num" id="statQuizScore">100%</div>
+                        <div class="stat-label" data-i18n="stat_accuracy">دقة المحاكاة</div>
+                    </div>
+                </div>
+
+                <!-- Tools Quick Launch Grid -->
+                <h3 class="section-title" data-i18n="tools_title">أدوات المختبر التفاعلية</h3>
+                <div class="tools-grid">
+                    <div class="tool-card glass-card" onclick="switchTab('punnett')">
+                        <div class="tool-icon-box cyan-box">⊞</div>
+                        <div class="tool-info">
+                            <h4 data-i18n="tool_punnett_title">مربع بانيت</h4>
+                            <p data-i18n="tool_punnett_desc">محاكي التزاوج الأحادي والثنائي مع حساب النسب المئوية</p>
+                        </div>
+                    </div>
+                    <div class="tool-card glass-card" onclick="switchTab('solver')">
+                        <div class="tool-icon-box purple-box">🧮</div>
+                        <div class="tool-info">
+                            <h4 data-i18n="tool_solver_title">محلل الوراثة المندلية</h4>
+                            <p data-i18n="tool_solver_desc">حل مسائل التوريث السريرية والكلاسيكية خطوة بخطوة</p>
+                        </div>
+                    </div>
+                    <div class="tool-card glass-card" onclick="switchTab('dna')">
+                        <div class="tool-icon-box green-box">🧬</div>
+                        <div class="tool-info">
+                            <h4 data-i18n="tool_dna_title">مستكشف الـ DNA</h4>
+                            <p data-i18n="tool_dna_desc">نموذج اللولب المزدوج وترجمة الكودونات إلى أحماض أمينية</p>
+                        </div>
+                    </div>
+                    <div class="tool-card glass-card" onclick="switchTab('breeding')">
+                        <div class="tool-icon-box amber-box">🧪</div>
+                        <div class="tool-info">
+                            <h4 data-i18n="tool_breeding_title">محاكي التزاوج العشوائي</h4>
+                            <p data-i18n="tool_breeding_desc">محاكاة مونت كارلو مع اختبار كاي تربيع χ² لحسن المطابقة</p>
+                        </div>
+                    </div>
+                    <div class="tool-card glass-card" onclick="switchTab('mutations')">
+                        <div class="tool-icon-box coral-box">⚡</div>
+                        <div class="tool-info">
+                            <h4 data-i18n="tool_mutations_title">مستكشف الطفرات الجينية</h4>
+                            <p data-i18n="tool_mutations_desc">طفرات الاستبدال والإزاحة وتأثيرها على سلاسل البروتين</p>
+                        </div>
+                    </div>
+                    <div class="tool-card glass-card" onclick="switchTab('assistant')">
+                        <div class="tool-icon-box purple-box">🤖</div>
+                        <div class="tool-info">
+                            <h4 data-i18n="tool_ai_title">المساعد الذكي GeneLab AI</h4>
+                            <p data-i18n="tool_ai_desc">إجابة الأسئلة وحل الواجبات وشرح المفاهيم بالذكاء الاصطناعي</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: PUNNETT SQUARE SIMULATOR -->
+            <section id="tab-punnett" class="tab-pane">
+                <div class="tab-header">
+                    <h2 data-i18n="punnett_title">محاكي مربع بانيت (Punnett Square)</h2>
+                    <p data-i18n="punnett_sub">احسب احتمالات التزاوج الوراثي للأبوين مع النسب الجينية والمظهرية الدقيقة.</p>
+                </div>
+
+                <div class="mode-switch-box">
+                    <button class="mode-btn active" id="btnMonoMode" onclick="setPunnettMode('mono')">
+                        <span data-i18n="mode_mono">تزاوج أحادي (صفة واحدة)</span>
+                    </button>
+                    <button class="mode-btn" id="btnDiMode" onclick="setPunnettMode('di')">
+                        <span data-i18n="mode_di">تزاوج ثنائي (صفتان - 16 خلية)</span>
+                    </button>
+                </div>
+
+                <!-- Trait Presets -->
+                <div id="monoTraitRow" class="presets-row">
+                    <span class="preset-label" data-i18n="preset_label">صفات مندل في البازلاء:</span>
+                    <button class="chip active" onclick="setPeaTrait('flower')">لون الزهرة (P/p)</button>
+                    <button class="chip" onclick="setPeaTrait('seed_shape')">شكل البذور (R/r)</button>
+                    <button class="chip" onclick="setPeaTrait('seed_color')">لون البذور (Y/y)</button>
+                    <button class="chip" onclick="setPeaTrait('height')">طول الساق (T/t)</button>
+                </div>
+
+                <!-- Inputs Box -->
+                <div class="glass-card inputs-card">
+                    <div class="parent-inputs-row">
+                        <div class="parent-box">
+                            <label data-i18n="parent1_label">الأب الأول (P1)</label>
+                            <input type="text" id="p1Input" value="Aa" maxlength="4" class="code-input" oninput="calculatePunnettWeb()">
+                        </div>
+                        <span class="cross-symbol">×</span>
+                        <div class="parent-box">
+                            <label data-i18n="parent2_label">الأب الثاني (P2)</label>
+                            <input type="text" id="p2Input" value="Aa" maxlength="4" class="code-input" oninput="calculatePunnettWeb()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Grid & Stats -->
+                <div class="punnett-layout-grid">
+                    <div class="glass-card grid-card">
+                        <h4 class="card-subtitle" data-i18n="punnett_grid_title">مصفوفة مربع بانيت الناتجة</h4>
+                        <div id="punnettGridContainer" class="punnett-matrix"></div>
+                    </div>
+
+                    <div class="glass-card ratios-card">
+                        <h4 class="card-subtitle" data-i18n="punnett_ratios_title">النسب الجينية والمظهرية</h4>
+                        <div class="ratio-section">
+                            <h5>النسب الجينية (Genotypes):</h5>
+                            <div id="genotypeBars" class="bars-list"></div>
+                        </div>
+                        <div class="ratio-section">
+                            <h5>النسب المظهرية (Phenotypes):</h5>
+                            <div id="phenotypeBars" class="bars-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step-by-Step Explanation -->
+                <div class="glass-card explanation-card">
+                    <div class="exp-header">
+                        <span class="bulb-icon">💡</span>
+                        <h4 data-i18n="explanation_title">التفسير العلمي المندلي خطوة بخطوة</h4>
+                    </div>
+                    <div id="punnettExplanation" class="exp-body"></div>
+                </div>
+            </section>
+
+            <!-- TAB 3: MENDELIAN SOLVER -->
+            <section id="tab-solver" class="tab-pane">
+                <div class="tab-header">
+                    <h2 data-i18n="solver_title">محلل مسائل الوراثة المندلية</h2>
+                    <p data-i18n="solver_sub">استعرض سيناريوهات سريرية حقيقية أو اكتب مسألتك ليحللها المساعد الذكي.</p>
+                </div>
+
+                <div class="presets-row" id="solverScenariosRow"></div>
+
+                <div class="glass-card scenario-display-card">
+                    <div class="badge purple-badge" id="scPatternBadge">وراثة جسمية متنحية</div>
+                    <h3 id="scTitle" class="sc-title">التليف الكيسي</h3>
+                    <p id="scDesc" class="sc-desc"></p>
+                    <div class="solution-box">
+                        <h4 data-i18n="solution_steps_title">خطوات الحل والحسابات:</h4>
+                        <div id="scSolution" class="solution-text"></div>
+                    </div>
+                </div>
+
+                <!-- Custom Problem Input -->
+                <div class="glass-card custom-problem-card">
+                    <h4 data-i18n="custom_problem_title">اكتب مسألة وراثية مخصصة:</h4>
+                    <textarea id="customProblemInput" placeholder="مثال: تزاوج بين نبات بازلاء أملس البذور هجين (Rr) مع نبات مجعد (rr)..." class="custom-textarea"></textarea>
+                    <button class="btn btn-primary" onclick="solveCustomProblem()">
+                        <span>🤖</span> <span data-i18n="solve_ai_btn">تحليل وحل المسألة بالمساعد الذكي</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- TAB 4: DNA EXPLORER -->
+            <section id="tab-dna" class="tab-pane">
+                <div class="tab-header">
+                    <h2 data-i18n="dna_title">مستكشف الحمض النووي DNA</h2>
+                    <p data-i18n="dna_sub">اللولب المزدوج، تكامل القواعد النيتروجينية، النسخ إلى mRNA، وترجمة الكودونات.</p>
+                </div>
+
+                <div class="dna-viewer-box glass-card">
+                    <div class="dna-canvas-container">
+                        <canvas id="interactiveDnaCanvas" width="400" height="180"></canvas>
+                    </div>
+                    <div class="dna-legend">
+                        <div class="base-badge base-a">A: أدينين (Adenine)</div>
+                        <div class="base-badge base-t">T: ثايمين (Thymine)</div>
+                        <div class="base-badge base-c">C: سيتوسين (Cytosine)</div>
+                        <div class="base-badge base-g">G: جوانين (Guanine)</div>
+                        <div class="base-badge base-u">U: يوراسيل (Uracil)</div>
+                    </div>
+                </div>
+
+                <div class="glass-card dna-input-card">
+                    <label data-i18n="dna_input_label">أدخل تسلسل الـ DNA لتحليله (A, T, C, G):</label>
+                    <div class="input-with-presets">
+                        <input type="text" id="dnaInputWeb" value="ATGCGATACGCTTGA" class="code-input dna-seq-input" oninput="analyzeDnaWeb()">
+                    </div>
+                    <div class="presets-row mini-presets">
+                        <button class="chip" onclick="setDnaPreset('ATGCGATACGCTTGA')">بدء وتوقف (Standard)</button>
+                        <button class="chip" onclick="setDnaPreset('ATGGTGCACCTGACT')">بيتا-جلوبين الطبيعي</button>
+                        <button class="chip" onclick="setDnaPreset('ATGTTTGGCCAATAG')">سلسلة متعددة الببتيد</button>
+                    </div>
+                </div>
+
+                <!-- DNA Visual Results -->
+                <div class="glass-card sequence-results-card">
+                    <h4 data-i18n="dna_strands_title">السلاسل والتكامل النيتروجيني (Chargaff):</h4>
+                    
+                    <div class="strand-group">
+                        <span class="strand-title">السلسلة الأصلية المشفرة (Sense 5' ➔ 3'):</span>
+                        <div id="senseStrandChips" class="strand-chips"></div>
+                    </div>
+
+                    <div class="strand-group">
+                        <span class="strand-title">السلسلة المكملة (Antisense 3' ➔ 5'):</span>
+                        <div id="complementaryStrandChips" class="strand-chips"></div>
+                    </div>
+
+                    <div class="strand-group">
+                        <span class="strand-title">الـ mRNA المنسوخ (Transcription):</span>
+                        <div id="mrnaDisplay" class="code-box"></div>
+                    </div>
+
+                    <div class="strand-group">
+                        <span class="strand-title">ترجمة الكودونات إلى أحماض أمينية (Polypeptide Chain):</span>
+                        <div id="aminoAcidsRow" class="amino-acids-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: BREEDING SIMULATOR -->
+            <section id="tab-breeding" class="tab-pane">
+                <div class="tab-header">
+                    <h2 data-i18n="breeding_title">محاكي التزاوج العشوائي واختبار كاي تربيع</h2>
+                    <p data-i18n="breeding_sub">محاكاة مونت كارلو لملاحظة قانون الأعداد الكبيرة وتفسير الانحراف الإحصائي العشوائي.</p>
+                </div>
+
+                <div class="glass-card simulation-controls-card">
+                    <div class="sim-params">
+                        <div class="parent-box">
+                            <label>الأب 1 (P1):</label>
+                            <input type="text" id="simP1" value="Aa" class="code-input" maxlength="2">
+                        </div>
+                        <span class="cross-symbol">×</span>
+                        <div class="parent-box">
+                            <label>الأب 2 (P2):</label>
+                            <input type="text" id="simP2" value="Aa" class="code-input" maxlength="2">
+                        </div>
+                        <div class="sample-box">
+                            <label>حجم العينة (N):</label>
+                            <select id="simSampleSize" class="custom-select">
+                                <option value="10">N = 10 (عينة صغيرة جداً)</option>
+                                <option value="50">N = 50</option>
+                                <option value="100" selected>N = 100</option>
+                                <option value="500">N = 500</option>
+                                <option value="1000">N = 1000 (عينة كبيرة)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="runBreedingSimulationWeb()">
+                            <span>🧪</span> <span>إجراء المحاكاة الآن</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass-card sim-results-card">
+                    <div class="sim-res-header">
+                        <h4>مقارنة النتائج المرصودة مع التوقعات النظرية (Mendelian Fit):</h4>
+                        <span id="simCountBadge" class="badge cyan-badge">N = 100</span>
+                    </div>
+
+                    <div id="simComparisonBars" class="bars-list"></div>
+
+                    <div class="chi-square-box">
+                        <div class="chi-row">
+                            <span class="chi-label">قيمة اختبار كاي تربيع (χ² Goodness-of-Fit):</span>
+                            <span id="chiValue" class="chi-val">0.00</span>
+                        </div>
+                        <p id="chiExplanation" class="chi-desc"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 6: MUTATION EXPLORER -->
+            <section id="tab-mutations" class="tab-pane">
+                <div class="tab-header">
+                    <h2 data-i18n="mutations_title">مستكشف الطفرات الجينية (Mutation Explorer)</h2>
+                    <p data-i18n="mutations_sub">تأثير الطفرات النقطية (الصامتة، المؤثرة، غير المجدية) وإزاحة الإطار على سلاسل البروتين.</p>
+                </div>
+
+                <div class="presets-row" id="mutationsPresetsRow"></div>
+
+                <div class="glass-card mutation-detail-card">
+                    <div class="mutation-header-info">
+                        <span id="mutTypeBadge" class="badge coral-badge">طفرة استبدال</span>
+                        <span id="mutPosBadge" class="badge cyan-badge">الموقع: 6</span>
+                    </div>
+                    <h3 id="mutTitle" class="mut-title">طفرة فقر الدم المنجلي</h3>
+                    <p id="mutDesc" class="mut-desc"></p>
+
+                    <div class="comparison-sequences">
+                        <div class="seq-block">
+                            <span class="seq-tag original-tag">التسلسل الأصلي الطبيعي (Wild-Type):</span>
+                            <div id="originalSeqBadges" class="strand-chips"></div>
+                            <div id="originalProteinBadges" class="amino-acids-container mini-aa"></div>
+                        </div>
+
+                        <div class="seq-block">
+                            <span class="seq-tag mutated-tag">التسلسل الطافر (Mutated DNA):</span>
+                            <div id="mutatedSeqBadges" class="strand-chips"></div>
+                            <div id="mutatedProteinBadges" class="amino-acids-container mini-aa"></div>
+                        </div>
+                    </div>
+
+                    <div class="impact-box">
+                        <h4>التأثير البيولوجي الدقيق للطفرة:</h4>
+                        <p id="mutImpactText"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 7: LEARNING CENTER -->
+            <section id="tab-lessons" class="tab-pane">
+                <div class="tab-header">
+                    <h2 data-i18n="lessons_title">مركز الدروس والمنهج العلمي</h2>
+                    <p data-i18n="lessons_sub">دروس منظمة عبر 3 مسارات تدريبية مع اختبارات فهم فورية ومعجم مصطلحات شامل.</p>
+                </div>
+
+                <div class="subtabs-bar">
+                    <button class="subtab-btn active" id="btnLessonsTab" onclick="switchLearningSubtab('lessons')">قائمة الدروس (9 دروس)</button>
+                    <button class="subtab-btn" id="btnGlossaryTab" onclick="switchLearningSubtab('glossary')">معجم المصطلحات (Glossary)</button>
+                </div>
+
+                <div id="lessonsSubpane" class="lessons-grid"></div>
+
+                <div id="glossarySubpane" class="glossary-pane hidden">
+                    <input type="text" id="glossarySearch" placeholder="ابحث عن مصطلح علمي أو رمز..." class="code-input search-input" oninput="filterGlossaryWeb()">
+                    <div id="glossaryList" class="glossary-list"></div>
+                </div>
+            </section>
+
+            <!-- TAB 8: AI QUIZ -->
+            <section id="tab-quiz" class="tab-pane">
+                <div class="tab-header">
+                    <h2 data-i18n="quiz_title">مولد الاختبارات والتقييم الذكي</h2>
+                    <p data-i18n="quiz_sub">اختبر معرفتك في الوراثة المندلية والـ DNA وتلقَّ تفسيرات علمية فورية.</p>
+                </div>
+
+                <div class="presets-row">
+                    <button class="chip active" onclick="startQuizWeb('All')">جميع الموضوعات</button>
+                    <button class="chip" onclick="startQuizWeb('DNA')">الحمض النووي DNA</button>
+                    <button class="chip" onclick="startQuizWeb('Punnett')">بانيت وقوانين مندل</button>
+                    <button class="chip" onclick="startQuizWeb('Complex')">الوراثة المعقدة</button>
+                    <button class="chip" onclick="startQuizWeb('Mutations')">الطفرات</button>
+                </div>
+
+                <div id="quizPlayBox" class="glass-card quiz-card">
+                    <div class="quiz-header-bar">
+                        <span id="quizQCount" class="badge cyan-badge">السؤال 1 من 5</span>
+                        <span id="quizScoreBadge" class="badge green-badge">الدرجة: 0</span>
+                    </div>
+
+                    <h3 id="quizQuestionText" class="quiz-question"></h3>
+                    <div id="quizOptionsList" class="quiz-options"></div>
+
+                    <div id="quizFeedbackBox" class="quiz-feedback hidden"></div>
+
+                    <button id="quizActionBtn" class="btn btn-primary quiz-action-btn" onclick="handleQuizAction()">
+                        تأكيد الإجابة
+                    </button>
+                </div>
+            </section>
+
+            <!-- TAB 9: AI ASSISTANT -->
+            <section id="tab-assistant" class="tab-pane">
+                <div class="tab-header">
+                    <h2 data-i18n="ai_title">المساعد الوراثي الذكي GeneLab AI</h2>
+                    <p data-i18n="ai_sub">اطرح أي استفسار بيولوجي، اطلب حل مسألة تزاوج، أو استوضح آليات الوراثة والـ DNA.</p>
+                </div>
+
+                <div class="chat-container glass-card">
+                    <div class="quick-chips-row">
+                        <button class="chip mini" onclick="sendQuickPrompt('حل مسألة تزاوج Aa × Aa مع مربع بانيت والنسب')">Aa × Aa</button>
+                        <button class="chip mini" onclick="sendQuickPrompt('ما الفرق بين الانقسام المتساوي والمنصف؟')">الانقسام المتساوي والمنصف</button>
+                        <button class="chip mini" onclick="sendQuickPrompt('اشرح وراثة فصائل الدم ABO والسيادة المشتركة')">فصائل الدم ABO</button>
+                        <button class="chip mini" onclick="sendQuickPrompt('كيف تعمل تقنية كريسبر-كاس9 في التعديل الجيني؟')">كريسبر CRISPR</button>
+                    </div>
+
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="chat-bubble ai-bubble">
+                            <span class="sender-name">GeneLab AI 🧬</span>
+                            <p>مرحباً بك في مختبر علم الوراثة! أنا مساعدك الذكي المتخصص. يمكنك سؤالي عن مفاهيم الـ DNA، حل مسائل التزاوج المندلي، أو الاستعداد لاختباراتك البيولوجية.</p>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-row">
+                        <input type="text" id="aiInput" placeholder="اكتب سؤالك أو مسألتك هنا..." class="code-input chat-input" onkeypress="if(event.key==='Enter') sendAiMessage()">
+                        <button class="btn btn-primary send-btn" onclick="sendAiMessage()">
+                            <span>إرسال</span> <span>➔</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Mobile Bottom Navigation (Visible on Small Screens Only) -->
+        <nav class="mobile-bottom-nav">
+            <button class="nav-tab active" onclick="switchTab('dashboard')">
+                <span class="icon">📊</span>
+                <span class="label">الرئيسية</span>
+            </button>
+            <button class="nav-tab" onclick="switchTab('punnett')">
+                <span class="icon">⊞</span>
+                <span class="label">بانيت</span>
+            </button>
+            <button class="nav-tab" onclick="switchTab('dna')">
+                <span class="icon">🧬</span>
+                <span class="label">DNA</span>
+            </button>
+            <button class="nav-tab" onclick="switchTab('lessons')">
+                <span class="icon">📖</span>
+                <span class="label">الدروس</span>
+            </button>
+            <button class="nav-tab" onclick="switchTab('assistant')">
+                <span class="icon">🤖</span>
+                <span class="label">المساعد</span>
+            </button>
+        </nav>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

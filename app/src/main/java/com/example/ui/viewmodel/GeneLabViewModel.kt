@@ -28,7 +28,8 @@ enum class AppNavDestination(val iconName: String, val titleEn: String, val titl
     MUTATION_EXPLORER("change_circle", "Mutations", "مستكشف الطفرات"),
     LEARNING_CENTER("menu_book", "Lessons", "الدروس"),
     AI_QUIZ("quiz", "AI Quiz", "الاختبارات"),
-    AI_ASSISTANT("psychology", "AI Assistant", "المساعد الذكي")
+    AI_ASSISTANT("psychology", "AI Assistant", "المساعد الذكي"),
+    WEB_VIEW("language", "Web View", "الموقع التفاعلي")
 }
 
 data class UiNotification(val message: String, val isError: Boolean = false)

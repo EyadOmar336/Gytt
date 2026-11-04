@@ -265,6 +265,77 @@ fun DashboardScreen(
             }
         }
 
+        // Web App View Banner
+        item {
+            GlassCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { viewModel.navigateTo(AppNavDestination.WEB_VIEW) }
+                    .testTag("dashboard_web_view_card"),
+                backgroundColor = NeonCyan.copy(alpha = 0.12f),
+                borderColor = NeonCyan.copy(alpha = 0.4f),
+                glowing = true
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(CircleShape)
+                            .background(NeonCyan.copy(alpha = 0.25f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            Icons.Default.Language,
+                            contentDescription = null,
+                            tint = NeonCyan,
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(14.dp))
+
+                    Column(modifier = Modifier.weight(1f)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = if (isAr) "موقع الويب التفاعلي المتجاوب" else "Responsive Web App View",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 15.sp,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Surface(
+                                shape = RoundedCornerShape(4.dp),
+                                color = NeonCyan.copy(alpha = 0.2f)
+                            ) {
+                                Text(
+                                    text = "WEB / PWA",
+                                    fontSize = 9.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = NeonCyan,
+                                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+                        Text(
+                            text = if (isAr) "استعراض النسخة المخصصة لمتصفحات الويب والحواسيب والشاشات الكبيرة"
+                            else "Launch full responsive desktop & mobile HTML5/CSS3 web version",
+                            fontSize = 11.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    Icon(
+                        Icons.Default.ChevronRight,
+                        contentDescription = null,
+                        tint = NeonCyan
+                    )
+                }
+            }
+        }
+
         // AI Assistant Quick Banner
         item {
             GlassCard(
